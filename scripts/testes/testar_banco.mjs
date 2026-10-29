@@ -60,14 +60,16 @@ async function teste(nome, fn, deveFalhar = false) {
 }
 
 // ---------------------------------------------------------------- dados carregados
-await teste('carga: contagens', () => um(`select (select count(*) from cidades)::int cidades, (select count(*) from fornecedores)::int fornecedores,
-  (select count(*) from materiais)::int materiais, (select count(*) from requisicoes)::int requisicoes, (select count(*) from pedidos)::int pedidos,
-  (select count(*) from colaboradores)::int colaboradores, (select count(*) from modelos_documentos)::int modelos, (select count(*) from auditoria)::int auditoria`));
-await teste('carga: nenhum dado pessoal de fornecedor', async () => { const r = await um(`select count(*)::int n from fornecedores where tipo='PF' or cpf is not null or contato is not null or celular1 is not null`); if (r.n) throw new Error(r.n + ' com dado pessoal'); return r; });
+await teste('carga: só localidade', async () => {
+  const r = await um(`select (select count(*) from paises)::int paises, (select count(*) from estados)::int estados, (select count(*) from cidades)::int cidades,
+    (select count(*) from fornecedores)::int + (select count(*) from materiais)::int + (select count(*) from obras)::int + (select count(*) from requisicoes)::int
+    + (select count(*) from colaboradores)::int outros, (select count(*) from modelos_documentos)::int modelos`);
+  if (r.outros) throw new Error(r.outros + ' cadastros além da localidade');
+  return r;
+});
 await teste('carga: acentos preservados', async () => (await q(`select nome from cidades where nome like '%Ã%' or nome like '%Ç%' or nome like '%Á%' limit 4`)).map((r) => r.nome));
 await teste('carga: cidades duplicadas por estado separadas', () => um(`select nome, count(*)::int estados from cidades group by nome having count(*) > 3 order by 2 desc limit 1`));
-await teste('carga: valor de pedido histórico', () => um(`select id, round(valor_pedido(id), 2)::text valor from pedidos order by id limit 1`));
-await teste('carga: sequência continua após o maior id', async () => { const r = await um(`insert into materiais (nome) values ('TESTE SEQ') returning id`); await q(`delete from materiais where id=$1`, [r.id]); return r; });
+await teste('carga: sequência continua após o maior id', async () => { const r = await um(`insert into cidades (nome) values ('TESTE SEQ') returning id`); await q(`delete from cidades where id=$1`, [r.id]); return r; });
 await teste('busca sem acento (sem_acento)', async () => (await q(`select nome from cidades where sem_acento(nome) like '%itau de minas%' limit 2`)).map((r) => r.nome));
 
 // ---------------------------------------------------------------- usuários
@@ -100,9 +102,9 @@ await teste('NR-33 vencida aparece no painel', () => como(ana.id, async () => { 
 await teste('beto (sem segurança) não vê vencimentos pessoais', () => como(beto.id, () => um(`select count(*)::int n from vencimentos where colaborador_id is not null`)));
 
 // ---------------------------------------------------------------- compras
-const obra = (await um(`select id from obras order by id limit 1`)).id;
-const mat = (await q(`select id from materiais where status='ativo' order by id limit 2`)).map((r) => r.id);
-const forn = (await q(`select id from fornecedores order by id limit 2`)).map((r) => r.id);
+const obra = (await um(`insert into obras (codigo, razao_social) values (1, 'OBRA TESTE') returning id`)).id;
+const mat = (await q(`insert into materiais (nome) values ('CABO 2,5MM'), ('ELETRODUTO 1"') returning id`)).map((r) => r.id);
+const forn = (await q(`insert into fornecedores (razao_social) values ('FORNECEDOR A LTDA'), ('FORNECEDOR B LTDA') returning id`)).map((r) => r.id);
 await q(`insert into permissoes values ($1,'requisicao',4),($1,'requisicao_recebimento',4)`, [beto.id]);
 let req;
 await teste('beto abre requisição (solicitante automático)', async () => { req = (await como(beto.id, () => q(`insert into requisicoes (obra_id, urgente) values ($1, true) returning id, solicitante_id = auth.uid() as dono`, [obra])))[0]; return req; });

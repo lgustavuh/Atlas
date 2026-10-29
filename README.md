@@ -32,14 +32,13 @@ Painel inicial com vencimentos (NR, ASO, CNH, experiência, férias, documentos,
 1. `0001_estrutura.sql` — tabelas, tipos, gatilhos (auditoria, histórico, vencimento de NR)
 2. `0002_permissoes.sql` — módulos e políticas RLS
 3. `0003_compras_alertas.sql` — fluxo de compras, recrutamento, alertas, painel de vencimentos, armazenamento
-4. `0004_carga_dados.sql` — **somente dados não pessoais** do dump antigo (gerado por `scripts/importar_dump.py`)
+4. `0004_carga_dados.sql` — países, estados e cidades do dump antigo (gerado por `scripts/importar_dump.py`)
 5. `0005_modelos_documentos.sql` — modelos dos documentos padronizados (editáveis pelo sistema)
+6. `0006_endurecer_funcoes.sql` — tira de visitantes a execução de funções e fixa o `search_path`
 
 ### O que foi importado do sistema antigo
 
-Cidades/estados/países, cargos, obras, fornecedores pessoa jurídica (sem nome de contato e celulares), grupos, materiais, veículos, manutenções, repúblicas, áreas da biblioteca e o histórico de compras (101 requisições, 162 orçamentos, 132 pedidos) **sem as pessoas** (solicitante, comprador e aprovador ficam vazios).
-
-**Não importado (só a estrutura)**: colaboradores e tudo ligado a eles, usuários/senhas, logs, alertas, compartilhamentos, alçadas e fornecedores pessoa física. Os arquivos enviados no sistema antigo não estavam na pasta, então a biblioteca começa vazia.
+Somente a localidade: 3 países, 28 estados e 5.614 cidades. Todos os outros cadastros (colaboradores, fornecedores, materiais, obras, cargos, veículos, compras...) começam vazios. Além disso, o banco já vem com os módulos de permissão, as NRs 10, 33 e 35 e os modelos de documentos.
 
 Para regenerar a carga: `npm run importar` (lê `../localhost.sql`).
 
