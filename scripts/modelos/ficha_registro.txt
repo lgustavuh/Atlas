@@ -1,0 +1,57 @@
+# FICHA DE REGISTRO DE EMPREGADO
+
+^ {{empresa}} — CNPJ {{empresa_cnpj}} — {{empresa_endereco}} — {{empresa_cidade}} - {{empresa_uf}} — CEP {{empresa_cep}}
+
+| NÚMERO DE ORDEM (FICHA) | NÚMERO DE RH | FOTOGRAFIA 3X4 / AUTENTICAÇÃO
+| {{ficha}} | {{rh}} |
+
+| NOME
+| {{nome}}
+
+| FILIAÇÃO | NOME | NACIONALIDADE
+| PAI | {{nome_pai}} | {{nacionalidade_pai}}
+| MÃE | {{nome_mae}} | {{nacionalidade_mae}}
+
+| DATA DO NASCIMENTO | IDADE | NACIONALIDADE | ESTADO CIVIL | LOCAL DO NASCIMENTO | ESTADO
+| {{data_nascimento}} | {{idade}} | {{nacionalidade}} | {{estado_civil}} | {{naturalidade}} | {{naturalidade_uf}}
+
+| CÉDULA DE IDENTIDADE | CART. PROFISSIONAL | SÉRIE | CART. RESERVISTA | CATEGORIA
+| {{rg}} {{rg_orgao_emissor}} | {{ctps}} | {{ctps_serie}} | {{reservista}} | {{reservista_categoria}}
+
+| C.P.F. | TÍTULO DE ELEITOR | CARTEIRA DE SAÚDE | PIS
+| {{cpf}} | {{titulo_eleitor}} | {{carteira_saude}} | {{pis}}
+
+| QUANDO ESTRANGEIRO | DATA DE CHEGADA AO BRASIL | CART. MOD. 19 | Nº REG. GERAL | NATURALIZADO? | CASADO(A) COM BRASILEIRO(A)? | FILHOS BRASILEIROS?
+| | | | | | |
+
+| ENDEREÇO
+| {{logradouro}} {{complemento}} / BAIRRO: {{bairro}} / {{cidade}} - {{uf}} / CEP: {{cep}}
+
+| MUDANÇA DE ENDEREÇO
+|
+
+| CARACTERÍSTICAS FÍSICAS | COR | ALTURA | PESO | CABELOS | OLHOS | SINAIS
+| | | | | | |
+
+^ BENEFICIÁRIOS
+
+[dependentes]
+
+| PROGRAMA DE INTEGRAÇÃO SOCIAL | CADASTRO EM | SOB Nº | DEP. NO BANCO | BANCO | AGÊNCIA
+| | | {{pis}} | | {{banco}} | {{banco_agencia}}
+
+| DATA DA ADMISSÃO | DATA DO REGISTRO | CARGO | SALÁRIO INICIAL | COMISSÕES | TAREFA | FORMA DE PAGAMENTO
+| {{admissao}} | {{admissao}} | {{cargo_registro}} | R$ {{salario_registro}}{{unidade_salario}} | | | MENSAL
+
+| FGTS — É OPTANTE? | DATA DA OPÇÃO | DATA DA RETRATAÇÃO | BANCO DEPOSITÁRIO
+| SIM | {{admissao}} | |
+
+| HORÁRIO DE TRABALHO | ENTRADA | REFEIÇÃO | SAÍDA | DESCANSO SEMANAL
+| | 07:00 | 11:00 / 12:00 | 17:00 | SÁBADO / DOMINGO
+
+^ Estou de pleno acordo com as declarações acima que exprimem a verdade.
+
+[assinaturas: Assinatura do empregado | Carimbo e visto do empregador]
+
+| POLEGAR DIREITO | DATA DA DEMISSÃO
+| |
