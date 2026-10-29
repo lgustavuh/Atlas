@@ -13,10 +13,9 @@ export async function GET(req: NextRequest) {
   // Documentação de colaboradores: registra quem baixou (como no sistema antigo).
   if (path.startsWith('documentos/')) {
     const { data: doc } = await supabase.from('documentos_colaborador').select('id').eq('arquivo_path', path).maybeSingle();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (doc && user) await supabase.from('documentos_colaborador_downloads').insert({ documento_id: doc.id, usuario_id: user.id });
+    const { data: auth } = await supabase.auth.getClaims();
+    const usuario = auth?.claims.sub;
+    if (doc && usuario) await supabase.from('documentos_colaborador_downloads').insert({ documento_id: doc.id, usuario_id: usuario });
   }
   return NextResponse.redirect(data.signedUrl);
 }

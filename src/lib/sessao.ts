@@ -13,14 +13,14 @@ export type Sessao = {
 /** Usuário logado + níveis por módulo (uma consulta por requisição). */
 export const obterSessao = cache(async (): Promise<Sessao | null> => {
   const supabase = await supabaseServidor();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
+  // token validado localmente; usuário desativado continua barrado pela consulta abaixo
+  const { data } = await supabase.auth.getClaims();
+  const id = data?.claims.sub;
+  if (!id) return null;
 
   const [{ data: usuario }, { data: permissoes }] = await Promise.all([
-    supabase.from('usuarios').select('id, nome, email, admin, ativo').eq('id', user.id).maybeSingle(),
-    supabase.from('permissoes').select('modulo, nivel').eq('usuario_id', user.id),
+    supabase.from('usuarios').select('id, nome, email, admin, ativo').eq('id', id).maybeSingle(),
+    supabase.from('permissoes').select('modulo, nivel').eq('usuario_id', id),
   ]);
   if (!usuario || !usuario.ativo) return null;
 

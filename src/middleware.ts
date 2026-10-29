@@ -17,9 +17,10 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // getClaims valida o token localmente (chave ES256 publicada pelo Supabase) e só vai à rede
+  // para renovar a sessão vencida; getUser consultava o servidor de autenticação a cada página.
+  const { data } = await supabase.auth.getClaims();
+  const user = data?.claims;
 
   const caminho = request.nextUrl.pathname;
   if (!user && !PUBLICAS.some((p) => caminho.startsWith(p))) {
